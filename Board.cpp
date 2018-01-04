@@ -7,7 +7,7 @@
 //0 = empty, 1 = pawn, 2 = knight, 3 = bishop, 5 = rook, 9 = queen, 10 = king
 Board::Board(){
   //game is not done
-  isDone_ = false;
+  status_ = -1;
 
   //initialize empty squares
   for (int i = 0; i < 8; i++) {
@@ -30,7 +30,7 @@ Board::Board(){
   layout_[6][0]=2;
   layout_[7][0]=5;
 
-  //ionitialize black pieces
+  //initialize black pieces
   layout_[0][7]=-5;
   layout_[1][7]=-2;
   layout_[2][7]=-3;
@@ -42,10 +42,13 @@ Board::Board(){
 
 }
 
-Board::isDone() {return isDone_;}
+/*** PUBLIC MEMBER FUNCTIONS ***/
 
-Board::moveMade(std::string move){
-  
+//Board::isDone() {return isDone_;}
+
+bool Board::moveMade(std::string move){
+  Move m = Move::Move(move, 0, layout_);
+
 }
 
 //the hard part lul
@@ -55,10 +58,39 @@ std::string Board::makeMove(){
   }
 }
 
+
+/***  PRIVATE HELPER FUNCTIONS ****/
+
 int Board::makeMove(Move m){
 
 }
 
 std::vector<Move> Board::getMoves(){
 
+}
+
+void Board::updateStatus(){
+  bool whiteking=false;
+  bool blackking=false;
+  for (size_t i = 0; i < 64; i++) {
+    if (layout_[i%8][i/8]==10) whiteking == true;
+    else if (layout_[i%8][i/8]==-10) blackking == true;
+  }
+  if (whiteking&&blackking) status_ = -1;
+  else if (whiteking) status_ = 0;
+  else status_ = 1;
+}
+
+//for now this is pretty basic, just returns
+//the difference of point values of all the pieces
+//on the bord. improving this would make the engine
+//much better
+int Board::evaluate(){
+  int whitesum=0;
+  int blacksum=0;
+  for (size_t i = 0; i < 64; i++) {
+    if (layout_[i%8][i/8]<0) blacksum+=layout_[i%8][i/8];
+    else whitesum+=layout_[i%8][i/8];
+  }
+  return whitesum + blacksum;
 }
