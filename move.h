@@ -16,6 +16,7 @@ public:
   int piece;
   int source;
   int dest;
+  std::string code;
 };
 
 #endif

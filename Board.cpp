@@ -44,28 +44,51 @@ Board::Board(){
 
 /*** PUBLIC MEMBER FUNCTIONS ***/
 
-//Board::isDone() {return isDone_;}
+/*Board::isDone() {
+  if (status_ == -1) return false;
+  else return true;
+}*/
 
 bool Board::moveMade(std::string move){
   Move m = Move::Move(move, 0, layout_);
 
 }
 
-//the hard part lul
+//not really that hard
 std::string Board::makeMove(){
+  int bestmove=0;
+  Move best;
   for (Move m : getMoves()){
-
+    int x = evaluate(m);
+    if (x>bestmove){
+      best = m;
+      bestmove = x;
+    }
   }
+  return best.code;
 }
 
+int Board::getWinner(){
+  return status_;
+}
+
+void Board::PrintWinner(){
+  if (status_==1) cout << "Black Wins!"<<endl;
+  else if (status_==0) cout << "White Wins!" << endl;
+  else cout << "Game in progress.";
+}
 
 /***  PRIVATE HELPER FUNCTIONS ****/
 
+//helper function to rearrangethe Board
+//according to a given move
 int Board::makeMove(Move m){
 
 }
 
-std::vector<Move> Board::getMoves(){
+
+//team is 0 for white and 1 for black
+std::vector<Move> Board::getMoves(int team){
 
 }
 
@@ -81,16 +104,31 @@ void Board::updateStatus(){
   else status_ = 1;
 }
 
+int Board::evaluate(Move m){
+  //first copy the layout to a temp array
+  int[8][8] layout;
+  for (size_t i = 0; i < 64; i++) {
+    layout[i%8][i/8] = layout_[i%8][i/8];
+  }
+  //make the move on that new array
+
+  //get all the moves white can make,
+  //call evaluate(temp array)
+
+  //return avg case
+}
+
+// helper function for evaluate(Move m)
 //for now this is pretty basic, just returns
 //the difference of point values of all the pieces
 //on the bord. improving this would make the engine
 //much better
-int Board::evaluate(){
+int Board::evaluate(int** layout){
   int whitesum=0;
   int blacksum=0;
   for (size_t i = 0; i < 64; i++) {
-    if (layout_[i%8][i/8]<0) blacksum+=layout_[i%8][i/8];
-    else whitesum+=layout_[i%8][i/8];
+    if (layout[i%8][i/8]<0) blacksum+=layout[i%8][i/8];
+    else whitesum+=layout[i%8][i/8];
   }
   return whitesum + blacksum;
 }

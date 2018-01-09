@@ -14,6 +14,13 @@ public:
   std::string makeMove();
   bool moveMade(std::string move);
 
+  // returns 0 if white wins, 1 if black wins.
+  // returns -1 if game is not finished.
+  int getWinner();
+
+  // function to print the winner to the console
+  void printWinner();
+
 private:
   //helper function for the public function makeMove
   //returns
